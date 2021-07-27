@@ -72,7 +72,7 @@ const renderToDom = (divId, textToPrint) => {
 const buttons = () => {
   const domString = `<button type="button" class="btn btn-primary" id="all">All</button>
     <button type="button" class="btn btn-secondary" id="Trinity">Trinity</button>
-    <button type="button" class="btn btn-success"id-"Aja">Aja</button>
+    <button type="button" class="btn btn-success"id="Aja">Aja</button>
     <button type="button" class="btn btn-danger" id="Doc">Doc</button>`;
   renderToDom("#buttonContainer", domString);
 };
@@ -82,17 +82,10 @@ const filterPies = (array, instructor) => {
 };
 
 const handleButtonClick = (event) => {
-  if (event.target === "all") {
-    console.log("The all button");
-  }
-  if (event.target === "trinity") {
-    console.log("Trinity's button");
-  }
-  if (event.target === "Aja") {
-    console.log("Aja's button");
-  }
-  if (event.target === "Doc") {
-    console.log("Doc's button");
+  if (event.target.id === "all" || event.target.id === "buttonContainer") {
+    pieBuilder(pies);
+  } else {
+    pieBuilder(filterPies(pies, event.target.id));
   }
 };
 

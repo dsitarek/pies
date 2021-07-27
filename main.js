@@ -61,20 +61,79 @@ const pies = [
   },
 ];
 
-const allButtons = document.getElementById("buttonContainer");
-
 const renderToDom = (divId, textToPrint) => {
   const selectedDiv = document.querySelector(divId);
   selectedDiv.innerHTML = textToPrint;
 };
-
-//displays buttons
+// display buttons on the DOM
 const buttons = () => {
-  const domString = `<button type="button" class="btn btn-primary" id="all">All</button>
+  const domString = `
+    <button type="button" class="btn btn-primary" id="All">All</button>
     <button type="button" class="btn btn-secondary" id="Trinity">Trinity</button>
-    <button type="button" class="btn btn-success"id="Aja">Aja</button>
-    <button type="button" class="btn btn-danger" id="Doc">Doc</button>`;
+    <button type="button" class="btn btn-success" id="Aja">Aja</button>
+    <button type="button" class="btn btn-danger" id="Doc">Doc</button>
+    `;
+
   renderToDom("#buttonContainer", domString);
+};
+
+// display form on the DOM
+const pieForm = () => {
+  const domString = `
+      <form id="pieFormForm">
+        <div class="mb-3">
+          <label for="name" class="form-label">Name</label>
+          <input required type="text" class="form-control" id="name">
+        </div>
+        <div class="mb-3">
+          <label for="ingredients" class="form-label">Ingredients</label>
+          <input required type="text" class="form-control" id="ingredients">
+        </div>
+        <div class="mb-3">
+        <label for="bakeTemp" class="form-label">Bake Temp</label>
+        <input required type="number" class="form-control" id="bakeTemp">
+        </div>
+        <div class="mb-3">
+          <label for="drinkPairing" class="form-label">Drink Pairing</label>
+          <input required type="text" class="form-control" id="drinkPairing">
+        </div>
+        <div class="mb-3">
+          <label for="imageUrl" class="form-label">Image URL</label>
+          <input required type="url" class="form-control" id="imageUrl">
+        </div>
+        <div class="mb-3">
+          <label for="instructor" class="form-label">Instructor</label>
+          <input required type="text" class="form-control" id="instructor">
+        </div>
+        <div class="mb-3">
+          <label for="iceCream" class="form-label">Ice Cream</label>
+          <input required type="text" class="form-control" id="iceCream">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    `;
+
+  renderToDom("#pieForm", domString);
+};
+
+const handleFormSubmit = (event) => {
+  event.preventDefault();
+  const newPie = {
+    name: document.querySelector("#name").value,
+    ingredients: document.querySelector("#ingredients").value,
+    bakeTemp: document.querySelector("#bakeTemp").value,
+    drinkPairing: document.querySelector("#drinkPairing").value,
+    imageUrl: document.querySelector("#imageUrl").value,
+    instructor: document.querySelector("#instructor").value,
+    iceCream: document.querySelector("#iceCream").value,
+  };
+  pies.push(newPie);
+  pieBuilder(pies);
+};
+
+const pieFormEvents = () => {
+  const pieFormElement = document.querySelector("#pieFormForm");
+  pieFormElement.addEventListener("submit", handleFormSubmit);
 };
 
 const filterPies = (array, instructor) => {
@@ -82,38 +141,55 @@ const filterPies = (array, instructor) => {
 };
 
 const handleButtonClick = (event) => {
-  if (event.target.id === "all" || event.target.id === "buttonContainer") {
+  if (event.target.id === "All") {
     pieBuilder(pies);
-  } else {
-    pieBuilder(filterPies(pies, event.target.id));
+  }
+  if (event.target.id === "Trinity") {
+    const trinPies = filterPies(pies, event.target.id);
+    pieBuilder(trinPies);
+  }
+  if (event.target.id === "Aja") {
+    const ajasPies = filterPies(pies, event.target.id);
+    pieBuilder(ajasPies);
+  }
+  if (event.target.id === "Doc") {
+    const docsPies = filterPies(pies, event.target.id);
+    pieBuilder(docsPies);
   }
 };
 
 const pieBuilder = (piesArray) => {
   let domString = "";
   piesArray.forEach((pie) => {
-    domString += `<div class="card" style="width: 18rem;">
+    domString += `
+      <div class="card" style="width: 18rem;">
         <img src="${pie.imageUrl}" class="card-img-top" alt="${pie.name}">
         <div class="card-body">
-            <h5 class="card-title">${pie.name}</h5>
-            <p class="card-text">${pie.ingredients}</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
+          <h5 class="card-title">${pie.name}</h5>
+          <p class="card-text">${pie.ingredients}</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
         </div>
-  </div>`;
+      </div>
+      `;
   });
+
   renderToDom("#piesContainer", domString);
 };
 
-//handles button events
+// handles the button events
 const buttonEvents = () => {
-  allButtons.addEventListener("click", handleButtonClick);
+  document
+    .querySelector("#buttonContainer")
+    .addEventListener("click", handleButtonClick);
 };
 
-//this starts the app
 const init = () => {
+  // this starts the app
   buttons();
   buttonEvents();
   pieBuilder(pies);
+  pieForm();
+  pieFormEvents();
 };
 
 init();
